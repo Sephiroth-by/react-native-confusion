@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { View, Platform, Text, ScrollView, Image, StyleSheet } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { createAppContainer, SafeAreaView } from 'react-navigation';
@@ -10,8 +11,23 @@ import Home from './HomeComponent';
 import ContactUs from './ContactUsComponent';
 import AboutUs from './AboutUsComponent';
 import { DISHES } from '../shared/dishes';
+import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
 
+const mapStateToProps = state => {
+  return {
+    dishes: state.dishes,
+    comments: state.comments,
+    promotions: state.promotions,
+    leaders: state.leaders
+  }
+}
 
+const mapDispatchToProps = dispatch => ({
+  fetchDishes: () => dispatch(fetchDishes()),
+  fetchComments: () => dispatch(fetchComments()),
+  fetchPromos: () => dispatch(fetchPromos()),
+  fetchLeaders: () => dispatch(fetchLeaders()),
+})
 
 const MenuNavigator = createStackNavigator({
   Menu: { screen: Menu,
@@ -135,6 +151,13 @@ class Main extends Component {
     };
   }
 
+  componentDidMount() {
+    this.props.fetchDishes();
+    this.props.fetchComments();
+    this.props.fetchPromos();
+    this.props.fetchLeaders();
+  }
+
   render() {
  
     return (
@@ -169,5 +192,4 @@ const styles = StyleSheet.create({
   }
 });
 
-  
-export default Main;
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
