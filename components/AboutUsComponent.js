@@ -6,6 +6,7 @@ import { FlatList, ScrollView } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { LEADERS } from '../shared/leaders';
 import { baseUrl } from '../shared/baseUrl';
+import { Loading } from './LoadingComponent';
 
 const mapStateToProps = state => {
     return {
@@ -39,6 +40,27 @@ class AboutUs extends Component {
                       />
             );
         };
+
+        if (this.props.leaders.isLoading) {
+            return(
+                <ScrollView>
+                    <Card
+                        title='Corporate Leadership'>
+                        <Loading />
+                    </Card>
+                </ScrollView>
+            );
+        }
+        else if (this.props.leaders.errMess) {
+            return(
+                <ScrollView>
+                    <Card
+                        title='Corporate Leadership'>
+                        <Text>{this.props.leaders.errMess}</Text>
+                    </Card>
+                </ScrollView>
+            );
+        }
 
         return(
             <ScrollView>
