@@ -7,6 +7,7 @@ import { ListItem } from 'react-native-elements';
 import { LEADERS } from '../shared/leaders';
 import { baseUrl } from '../shared/baseUrl';
 import { Loading } from './LoadingComponent';
+import * as Animatable from 'react-native-animatable';
 
 const mapStateToProps = state => {
     return {
@@ -54,16 +55,19 @@ class AboutUs extends Component {
         else if (this.props.leaders.errMess) {
             return(
                 <ScrollView>
+                    <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
                     <Card
                         title='Corporate Leadership'>
                         <Text>{this.props.leaders.errMess}</Text>
                     </Card>
+                    </Animatable.View>
                 </ScrollView>
             );
         }
 
         return(
             <ScrollView>
+                <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
                 <Card>
                     <Card.Title>Our History</Card.Title>
                     <Card.Divider/>
@@ -79,6 +83,7 @@ class AboutUs extends Component {
                     keyExtractor={item => item.id.toString()}
                     />
                 </Card>
+                </Animatable.View>
             </ScrollView>
         );
     }

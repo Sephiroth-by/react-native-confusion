@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Text } from 'react-native';
 import { Card } from 'react-native-elements';
+import * as Animatable from 'react-native-animatable';
 
 class ContactUs extends Component {
 
@@ -14,6 +15,7 @@ class ContactUs extends Component {
 
     render() {
         return(
+            <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>   
             <Card>
                 <Card.Title>Contact Information</Card.Title>
                 <Card.Divider/>
@@ -24,6 +26,7 @@ class ContactUs extends Component {
                 <Text>Fax: +852 8765 4321</Text>
                 <Text>Email:confusion@food.net</Text>
             </Card>
+            </Animatable.View>
         );
     }
 }
