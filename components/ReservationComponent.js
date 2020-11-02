@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Picker, Switch, Button, ScrollView, Alert } from 'react-native';
 import { Card } from 'react-native-elements';
-import DatePicker from 'react-native-datepicker'
+import * as Calendar from 'expo-calendar';
+import DatePicker from '@react-native-community/datetimepicker'
 import * as Animatable from 'react-native-animatable';
 import * as Permissions from 'expo-permissions';
 import * as Notifications from 'expo-notifications';
@@ -14,7 +15,7 @@ class Reservation extends Component {
         this.state = {
             guests: 1,
             smoking: false,
-            date: ''
+            date: new Date()
         }
     }
 
@@ -31,17 +32,36 @@ class Reservation extends Component {
             'Number of guests: ' + this.state.guests + '\nSmoking: ' + this.state.smoking + '\nDate and Time: ' + this.state.date,
             [
             {text: 'Cancel', onPress: () => this.resetForm(), style: 'cancel'},
-            {text: 'OK', onPress: () => {this.resetForm(); this.presentLocalNotification()}},
+            {text: 'OK', onPress: () => {this.resetForm(); this.addReservationToCalendar(this.state.date); this.presentLocalNotification()}},
             ],
             { cancelable: false }
         );
+    }
+
+    async addReservationToCalendar(date) {
+      const { status } = await Calendar.requestCalendarPermissionsAsync();
+
+      if (status === 'granted') {
+
+        console.log(date);
+        Calendar.createEventAsync(
+            '1',
+            {
+                title: 'Con Fusion Table Reservation',
+                startDate: new Date(Date.parse(date)),
+                endDate: new Date(Date.parse(date) + (2 * 60 * 60 * 1000)),
+                location: '121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong',
+                timeZone: 'Asia/Hong_Kong'
+            }
+        );     
+      }
     }
 
     resetForm() {
         this.setState({
             guests: 1,
             smoking: false,
-            date: ''
+            date: new Date()
         });
     }
 
@@ -95,11 +115,10 @@ class Reservation extends Component {
                 <Text style={styles.formLabel}>Date and Time</Text>
                 <DatePicker
                     style={{flex: 2, marginRight: 20}}
-                    date={this.state.date}
+                    value={this.state.date}
                     format=''
-                    mode="datetime"
+                    mode="date"
                     placeholder="select date and Time"
-                    minDate="2017-01-01"
                     confirmBtnText="Confirm"
                     cancelBtnText="Cancel"
                     customStyles={{
@@ -114,7 +133,7 @@ class Reservation extends Component {
                     }
                     // ... You can check the source to find the other keys. 
                     }}
-                    onDateChange={(date) => {this.setState({date: date})}}
+                    onChange={(event, selectedDate) => {this.setState({date: date})}}
                 />
                 </View>
                 <View style={styles.formRow}>
